@@ -1,126 +1,111 @@
 # Grant Application Dashboard
 
-A comprehensive dashboard for managing grant applications, built with Flask, React, and Material-UI.
+An intelligent grant management co-pilot that helps non-profits find and win funding.
 
-## Features
+## 🎯 Project Goal
 
-- User authentication and authorization
-- Grant management and tracking
+This isn't just a database of grants - it's an active workflow tool that automates the most painful parts of the grant-seeking process:
+
+- **Discovery**: Sifting through hundreds of irrelevant opportunities
+- **Vetting**: Reading dozens of pages of guidelines just to see if you're eligible
+- **Management**: Juggling deadlines, tasks, and documents across multiple applications
+- **Writing**: Answering the same repetitive questions over and over again
+
+## 🚀 Features
+
+- Automated grant discovery and scraping
 - AI-powered eligibility analysis
-- Grant application draft generation
-- Analytics and reporting
-- Modern, responsive UI
+- Smart application drafting assistance
+- Document management and organization
+- Deadline tracking and reminders
+- Team collaboration tools
 
-## Tech Stack
+## 🛠️ Tech Stack
 
-### Backend
-- Flask (Python web framework)
-- SQLAlchemy (ORM)
-- Flask-JWT-Extended (Authentication)
-- Redis (Caching and rate limiting)
-- Anthropic Claude (AI integration)
-- Prometheus (Monitoring)
+- **Frontend**: React + TypeScript + Vite
+- **Backend**: Python + Flask
+- **Database**: Supabase (PostgreSQL)
+- **AI**: OpenAI/Anthropic/Groq
+- **Deployment**: Render.com
 
-### Frontend
-- React with TypeScript
-- Material-UI (Component library)
-- React Query (Data fetching)
-- Zustand (State management)
-- Formik & Yup (Form handling)
-- Vite (Build tool)
+## 📋 Prerequisites
 
-## Development Setup
+- Python 3.9+
+- Node.js 18+
+- Redis
+- Git
+- PostgreSQL (optional, SQLite for development)
+
+## 🏁 Getting Started
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/grant-application-dashboard.git
+git clone https://github.com/YOUR_USERNAME/grant-application-dashboard.git
 cd grant-application-dashboard
 ```
 
-2. Set up the backend:
+2. Run the setup script:
 ```bash
-# Create and activate virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+./setup.sh
+```
 
-# Install dependencies
-pip install -r requirements.txt
+3. Update the `.env` file with your credentials:
+```bash
+# Required environment variables
+SUPABASE_URL=your_supabase_project_url
+SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+OPENAI_API_KEY=your_openai_key  # or use ANTHROPIC_API_KEY/GROQ_API_KEY
+```
 
-# Set up environment variables
-cp .env.example .env
-# Edit .env with your configuration
+4. Start the development servers:
 
-# Initialize database
-flask db upgrade
-
-# Run the development server
+Backend:
+```bash
+# In the root directory
 python app.py
 ```
 
-3. Set up the frontend:
+Frontend:
 ```bash
+# In the frontend directory
 cd frontend
-
-# Install dependencies
-npm install
-
-# Start development server
 npm run dev
 ```
 
-## Deployment on Render.com
+## 📚 Documentation
 
-1. Fork this repository to your GitHub account.
+- [Project Blueprint](BLUEPRINT.md)
+- [Development Guide](DEVELOPMENT.md)
+- [API Documentation](http://localhost:5000/api/docs) (when running locally)
 
-2. Create a new Render account at https://render.com if you haven't already.
+## 🧪 Testing
 
-3. Connect your GitHub account to Render.
-
-4. Click "New +" and select "Blueprint" from the dropdown.
-
-5. Select your forked repository.
-
-6. Render will automatically detect the `render.yaml` configuration and create:
-   - Backend API service
-   - Frontend static site
-   - Redis instance
-   - PostgreSQL database
-
-7. Configure the following environment variables in Render:
-   - `ANTHROPIC_API_KEY`: Your Anthropic API key
-   - `SENTRY_DSN`: (Optional) Your Sentry DSN for error tracking
-
-8. Deploy! Render will automatically:
-   - Build and deploy the backend API
-   - Build and deploy the frontend
-   - Set up Redis and PostgreSQL
-   - Configure the necessary environment variables
-
-## API Documentation
-
-API documentation is available at `/api/docs` when running the application. The documentation is generated using OpenAPI/Swagger.
-
-## Testing
-
-### Backend Tests
+Run backend tests:
 ```bash
 pytest
 ```
 
-### Frontend Tests
+Run frontend tests:
 ```bash
 cd frontend
 npm test
 ```
 
-## Contributing
+## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-## License
+## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details. 
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- [Supabase](https://supabase.com/) for the amazing backend platform
+- [OpenAI](https://openai.com/)/[Anthropic](https://anthropic.com/)/[Groq](https://groq.com/) for AI capabilities
+- [Render](https://render.com/) for hosting 
