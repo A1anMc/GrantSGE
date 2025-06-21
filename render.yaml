@@ -1,0 +1,50 @@
+services:
+  # Backend API Service
+  - type: web
+    name: grant-dashboard-api
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:create_app() --bind 0.0.0.0:$PORT
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: SECRET_KEY
+        generateValue: true
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: grant-dashboard-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: grant-dashboard-redis
+          property: connectionString
+      - key: ANTHROPIC_API_KEY
+        sync: false
+
+  # Frontend Service
+  - type: web
+    name: grant-dashboard-frontend
+    env: static
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/dist
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: grant-dashboard-api
+          property: url
+
+  # Redis Service
+  - type: redis
+    name: grant-dashboard-redis
+    ipAllowList: []
+    plan: free
+
+databases:
+  - name: grant-dashboard-db
+    databaseName: grantdb
+    user: grantuser
+    plan: free 
