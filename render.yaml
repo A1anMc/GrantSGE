@@ -41,6 +41,8 @@ services:
     envVars:
       - key: VITE_API_URL
         value: https://grant-application-dashboard-api.onrender.com
+      - key: NODE_ENV
+        value: production
       - key: NODE_VERSION
         value: 18.0.0
     headers:
