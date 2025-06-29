@@ -1,7 +1,7 @@
 services:
   # Backend API Service
   - type: web
-    name: grant-application-dashboard-api
+    name: grant-dashboard-api
     env: python
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:create_app() --bind 0.0.0.0:$PORT --workers 4 --timeout 120
@@ -15,7 +15,7 @@ services:
       - key: DATABASE_URL
         value: sqlite:///grants.db  # Use SQLite instead of PostgreSQL
       - key: CORS_ORIGINS
-        value: https://grant-application-dashboard-frontend.onrender.com
+        value: https://grant-dashboard-frontend.onrender.com
       - key: PORT
         value: 10000
     healthCheckPath: /health
@@ -23,13 +23,13 @@ services:
 
   # Frontend Service
   - type: web
-    name: grant-application-dashboard-frontend
+    name: grant-dashboard-frontend
     env: static
     buildCommand: cd frontend && npm install && npm run build
     staticPublishPath: frontend/dist
     envVars:
       - key: VITE_API_URL
-        value: https://grant-application-dashboard-api.onrender.com
+        value: https://grant-dashboard-api.onrender.com
       - key: NODE_ENV
         value: production
       - key: NODE_VERSION
