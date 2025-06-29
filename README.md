@@ -24,7 +24,7 @@ This isn't just a database of grants - it's an active workflow tool that automat
 
 - **Frontend**: React + TypeScript + Vite
 - **Backend**: Python + Flask
-- **Database**: Supabase (PostgreSQL)
+- **Database**: SQLite (with migration support)
 - **AI**: OpenAI/Anthropic/Groq
 - **Deployment**: Render.com
 
@@ -32,9 +32,7 @@ This isn't just a database of grants - it's an active workflow tool that automat
 
 - Python 3.9+
 - Node.js 18+
-- Redis
 - Git
-- PostgreSQL (optional, SQLite for development)
 
 ## 🏁 Getting Started
 
@@ -52,10 +50,9 @@ cd grant-application-dashboard
 3. Update the `.env` file with your credentials:
 ```bash
 # Required environment variables
-SUPABASE_URL=your_supabase_project_url
-SUPABASE_ANON_KEY=your_supabase_anon_key
-SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
 OPENAI_API_KEY=your_openai_key  # or use ANTHROPIC_API_KEY/GROQ_API_KEY
+SECRET_KEY=your_secret_key
+JWT_SECRET_KEY=your_jwt_secret
 ```
 
 4. Start the development servers:
@@ -72,6 +69,22 @@ Frontend:
 cd frontend
 npm run dev
 ```
+
+## 🚀 Deployment
+
+The application is configured for deployment on Render.com with the following services:
+
+1. Backend API (grant-dashboard-api):
+   - Python/Flask application
+   - SQLite database
+   - Automatic deployments from main branch
+
+2. Frontend (grant-dashboard-frontend):
+   - Static site hosting
+   - Built with Vite
+   - Automatic deployments from main branch
+
+Configuration is managed through `render.yaml` in the root directory.
 
 ## 📚 Documentation
 
@@ -106,6 +119,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- [Supabase](https://supabase.com/) for the amazing backend platform
 - [OpenAI](https://openai.com/)/[Anthropic](https://anthropic.com/)/[Groq](https://groq.com/) for AI capabilities
 - [Render](https://render.com/) for hosting 

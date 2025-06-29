@@ -4,7 +4,7 @@ services:
     name: grant-dashboard-api
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:create_app() --bind 0.0.0.0:$PORT --workers 4 --timeout 120
+    startCommand: gunicorn "app:create_app()" --bind 0.0.0.0:$PORT --workers 4 --timeout 120
     envVars:
       - key: FLASK_ENV
         value: production
