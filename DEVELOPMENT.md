@@ -1,93 +1,226 @@
 # Development Guide
 
-## Prerequisites
+## 🛠️ Setup
 
-Before you begin, ensure you have the following installed:
-- Python 3.9+
-- Node.js 18+
-- Redis
-- Git
-- PostgreSQL (optional, SQLite for development)
+### Prerequisites
 
-## Getting Started
+- Python 3.11+
+- Node.js 20.11+
+- SQLite
+
+### Environment Setup
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/YOUR_USERNAME/grant-application-dashboard.git
-cd grant-application-dashboard
+git clone https://github.com/yourusername/grant-dashboard.git
+cd grant-dashboard
 ```
 
-2. Create and activate Python virtual environment:
+2. Create a virtual environment:
 ```bash
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate  # Linux/Mac
+venv\Scripts\activate     # Windows
 ```
 
-3. Install backend dependencies:
+3. Install dependencies:
 ```bash
 pip install -r requirements.txt
+cd frontend && npm install
 ```
 
-4. Set up environment variables:
+### Environment Variables
+
+Create a `.env` file in the root directory with:
+
 ```bash
-cp .env.example .env
-# Edit .env with your configuration
+# Flask Configuration
+FLASK_ENV=development
+SECRET_KEY=your_secret_key
+JWT_SECRET_KEY=your_jwt_key
+
+# Database Configuration
+DATABASE_URL=sqlite:///grants.db
+
+# CORS Configuration
+CORS_ORIGINS=http://localhost:5173
+
+# Monitoring Configuration
+SENTRY_DSN=your_sentry_dsn
 ```
 
-Required environment variables:
-- `FLASK_ENV`: development/production
-- `SECRET_KEY`: Flask secret key
-- `JWT_SECRET_KEY`: JWT token secret
-- `DATABASE_URL`: Database connection string
-- `ANTHROPIC_API_KEY`: Anthropic API key
-- `REDIS_HOST`: Redis host
-- `REDIS_PORT`: Redis port
-- `SENTRY_DSN`: Sentry DSN (optional)
+## 🏗️ Project Structure
 
-5. Initialize the database:
+```
+grant-dashboard/
+├── api/                 # Backend API
+│   ├── routes/         # API endpoints
+│   ├── models/         # Database models
+│   └── utils/          # Helper functions
+├── frontend/           # React frontend
+│   ├── src/
+│   │   ├── components/ # React components
+│   │   ├── pages/      # Page components
+│   │   └── services/   # API services
+├── tests/              # Test suite
+└── docs/               # Documentation
+```
+
+## 🚀 Development Workflow
+
+### Running Locally
+
+1. Start the backend:
+```bash
+python app.py
+```
+
+2. Start the frontend:
+```bash
+cd frontend
+npm run dev
+```
+
+### Database Management
+
+Initialize the database:
 ```bash
 flask db upgrade
 ```
 
-6. Install frontend dependencies:
+Create a new migration:
+```bash
+flask db migrate -m "Description"
+```
+
+### Testing
+
+Run backend tests:
+```bash
+pytest
+
+# With coverage
+pytest --cov=api
+```
+
+Run frontend tests:
 ```bash
 cd frontend
-npm install
+npm test
 ```
 
-7. Start the development servers:
+## 📚 API Documentation
 
-Backend:
+The API documentation is available at:
+- Local: http://localhost:5000/api/docs
+- Production: https://your-api-domain.com/api/docs
+
+## 🔄 Git Workflow
+
+1. Create a feature branch:
 ```bash
-# In the root directory
-python app.py
+git checkout -b feature/your-feature
 ```
 
-Frontend:
-```bash
-# In the frontend directory
-npm run dev
-```
-
-## Development Workflow
-
-1. Create a new branch for your feature:
-```bash
-git checkout -b feature/your-feature-name
-```
-
-2. Make your changes and commit them:
+2. Make your changes and commit:
 ```bash
 git add .
-git commit -m "Description of your changes"
+git commit -m "feat: add new feature"
 ```
 
-3. Push your changes:
+3. Push changes:
 ```bash
-git push origin feature/your-feature-name
+git push origin feature/your-feature
 ```
 
-4. Create a pull request on GitHub
+4. Create a pull request to main
+
+## 📦 Deployment
+
+The application is deployed on Render.com:
+
+1. Backend API (Python/Flask):
+   - Automatic deployments from main
+   - Uses Gunicorn server
+   - SQLite database
+
+2. Frontend (React):
+   - Static site hosting
+   - Automatic deployments from main
+   - Built with Vite
+
+### Environment Variables (Production)
+
+```bash
+# Flask Configuration
+FLASK_ENV=production
+SECRET_KEY=your_secret_key
+JWT_SECRET_KEY=your_jwt_key
+
+# Database Configuration
+DATABASE_URL=sqlite:///grants.db
+
+# CORS Configuration
+CORS_ORIGINS=https://your-frontend-domain.com
+
+# Monitoring
+SENTRY_DSN=your_sentry_dsn
+
+# Optional: Email Configuration
+EMAIL_HOST=smtp.yourprovider.com
+EMAIL_PORT=587
+EMAIL_USE_TLS=true
+EMAIL_USERNAME=your_username
+EMAIL_PASSWORD=your_password
+EMAIL_FROM=noreply@yourdomain.com
+```
+
+### Required Production Settings
+
+The following must be configured in production:
+
+- Secret key for Flask
+- JWT secret key
+- CORS origins
+- Sentry DSN (optional but recommended)
+- Email configuration: Required if you want to send email notifications
+
+## 📊 Monitoring
+
+The application includes:
+
+1. Prometheus metrics:
+   - Request latency
+   - Error rates
+   - System metrics
+
+2. Grafana dashboards:
+   - API performance
+   - System resources
+   - User activity
+
+3. Sentry error tracking:
+   - Exception monitoring
+   - Performance tracking
+   - User feedback
+
+## 🔒 Security
+
+1. Authentication:
+   - JWT tokens
+   - Refresh token rotation
+   - Password hashing with bcrypt
+
+2. Authorization:
+   - Role-based access control
+   - Resource ownership checks
+   - API scope validation
+
+3. API Security:
+   - Rate limiting
+   - CORS protection
+   - Input validation
+   - SQL injection prevention
 
 ## Code Style
 
@@ -103,52 +236,6 @@ git push origin feature/your-feature-name
 - Use TypeScript types/interfaces
 - Document complex components
 - Use Material-UI components
-
-## Testing
-
-### Backend Tests
-```bash
-# Run all tests
-pytest
-
-# Run with coverage
-pytest --cov=api --cov=models tests/
-
-# Run specific test file
-pytest tests/test_file.py
-```
-
-### Frontend Tests
-```bash
-# In the frontend directory
-npm test
-
-# Run with coverage
-npm run coverage
-```
-
-## Database Migrations
-
-Create a new migration:
-```bash
-flask db migrate -m "Description of changes"
-```
-
-Apply migrations:
-```bash
-flask db upgrade
-```
-
-Rollback migration:
-```bash
-flask db downgrade
-```
-
-## API Documentation
-
-The API documentation is available at:
-- Development: http://localhost:5000/api/docs
-- Production: https://your-api-domain.com/api/docs
 
 ## Debugging
 
@@ -185,57 +272,6 @@ The API documentation is available at:
    - Check JWT_SECRET_KEY
    - Verify token expiration
    - Check Redis for blacklisted tokens
-
-## Deployment
-
-1. Prepare for deployment:
-```bash
-./deploy.sh
-```
-
-2. Push to GitHub:
-```bash
-git push origin main
-```
-
-3. Deploy on Render.com:
-   - Connect GitHub repository
-   - Configure environment variables
-   - Deploy blueprint
-
-## Performance Optimization
-
-1. Backend:
-   - Use caching appropriately
-   - Optimize database queries
-   - Profile API endpoints
-   - Monitor memory usage
-
-2. Frontend:
-   - Lazy load components
-   - Optimize bundle size
-   - Use React.memo where appropriate
-   - Implement virtual scrolling
-
-## Security Best Practices
-
-1. API Security:
-   - Always validate input
-   - Sanitize output
-   - Use HTTPS
-   - Implement rate limiting
-
-2. Authentication:
-   - Use secure password hashing
-   - Implement token refresh
-   - Set secure cookie options
-   - Use proper CORS settings
-
-3. Data Protection:
-   - Validate file uploads
-   - Sanitize user input
-   - Implement proper access control
-   - Regular security audits
 
 ## Contributing
 
