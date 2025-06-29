@@ -6,13 +6,14 @@ services:
     region: oregon
     buildCommand: |
       python -m pip install --upgrade pip
+      pip install wheel
       pip install -r requirements.txt
-    startCommand: gunicorn "app:create_app()" --bind 0.0.0.0:$PORT --workers 4 --timeout 120
+    startCommand: gunicorn wsgi:app --bind 0.0.0.0:$PORT --workers 4 --timeout 120
     envVars:
       - key: FLASK_ENV
         value: production
       - key: PYTHON_VERSION
-        value: 3.13.0
+        value: 3.11.8
       - key: SECRET_KEY
         generateValue: true
       - key: JWT_SECRET_KEY
@@ -21,6 +22,8 @@ services:
         value: sqlite:///grants.db
       - key: CORS_ORIGINS
         value: https://grant-dashboard-frontend.onrender.com
+      - key: PYTHONUNBUFFERED
+        value: "true"
     healthCheckPath: /health
     autoDeploy: true
 
@@ -29,7 +32,7 @@ services:
     name: grant-dashboard-frontend
     buildCommand: |
       cd frontend
-      npm install
+      npm install --legacy-peer-deps
       npm run build
     staticPublishPath: frontend/dist
     envVars:
