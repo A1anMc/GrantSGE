@@ -24,8 +24,6 @@ services:
         value: https://grant-dashboard-frontend-7y6a.onrender.com
       - key: PYTHONUNBUFFERED
         value: "true"
-      - key: ANTHROPIC_API_KEY
-        sync: false
     healthCheckPath: /health
     autoDeploy: true
 
