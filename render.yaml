@@ -3,35 +3,38 @@ services:
   - type: web
     name: grant-dashboard-api
     env: python
-    buildCommand: pip install -r requirements.txt
+    region: oregon
+    buildCommand: |
+      python -m pip install --upgrade pip
+      pip install -r requirements.txt
     startCommand: gunicorn "app:create_app()" --bind 0.0.0.0:$PORT --workers 4 --timeout 120
     envVars:
       - key: FLASK_ENV
         value: production
+      - key: PYTHON_VERSION
+        value: 3.13.0
       - key: SECRET_KEY
         generateValue: true
       - key: JWT_SECRET_KEY
         generateValue: true
       - key: DATABASE_URL
-        value: sqlite:///grants.db  # Use SQLite instead of PostgreSQL
+        value: sqlite:///grants.db
       - key: CORS_ORIGINS
         value: https://grant-dashboard-frontend.onrender.com
-      - key: PORT
-        value: 10000
     healthCheckPath: /health
     autoDeploy: true
 
   # Frontend Service
-  - type: web
+  - type: static
     name: grant-dashboard-frontend
-    env: static
-    buildCommand: cd frontend && npm install && npm run build
+    buildCommand: |
+      cd frontend
+      npm install
+      npm run build
     staticPublishPath: frontend/dist
     envVars:
       - key: VITE_API_URL
         value: https://grant-dashboard-api.onrender.com
-      - key: NODE_ENV
-        value: production
       - key: NODE_VERSION
         value: 18.0.0
     headers:
