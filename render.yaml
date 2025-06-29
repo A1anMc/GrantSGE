@@ -3,6 +3,7 @@ services:
   - type: web
     name: grant-dashboard-api
     env: python
+    plan: free
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:create_app() --bind 0.0.0.0:$PORT --workers 4 --timeout 120
     envVars:
@@ -34,6 +35,7 @@ services:
   - type: web
     name: grant-dashboard-frontend
     env: static
+    plan: free
     buildCommand: cd frontend && npm install && npm run build
     staticPublishPath: frontend/dist
     envVars:
