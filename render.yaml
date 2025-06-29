@@ -1,7 +1,7 @@
 services:
   # Backend API Service
   - type: web
-    name: grant-dashboard-api
+    name: grant-dashboard-api-7y6a
     env: python
     region: oregon
     buildCommand: |
@@ -21,7 +21,7 @@ services:
       - key: DATABASE_URL
         value: sqlite:///grants.db
       - key: CORS_ORIGINS
-        value: https://grant-dashboard-frontend.onrender.com
+        value: https://grant-dashboard-frontend-7y6a.onrender.com
       - key: PYTHONUNBUFFERED
         value: "true"
       - key: ANTHROPIC_API_KEY
@@ -31,15 +31,16 @@ services:
 
   # Frontend Service
   - type: static
-    name: grant-dashboard-frontend
+    name: grant-dashboard-frontend-7y6a
     buildCommand: |
       cd frontend
-      npm install --legacy-peer-deps
+      export NODE_OPTIONS="--max-old-space-size=1024"
+      npm ci --legacy-peer-deps
       npm run build
     staticPublishPath: frontend/dist
     envVars:
       - key: VITE_API_URL
-        value: https://grant-dashboard-api.onrender.com
+        value: https://grant-dashboard-api-7y6a.onrender.com
       - key: NODE_VERSION
         value: 20.11.1
     headers:
