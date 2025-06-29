@@ -4,7 +4,7 @@ services:
     name: grant-dashboard-api
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:create_app() --bind 0.0.0.0:$PORT
+    startCommand: gunicorn app:create_app() --bind 0.0.0.0:$PORT --workers 4 --timeout 120
     envVars:
       - key: FLASK_ENV
         value: production
@@ -23,6 +23,12 @@ services:
           property: connectionString
       - key: ANTHROPIC_API_KEY
         sync: false
+      - key: CORS_ORIGINS
+        value: https://grant-dashboard-frontend.onrender.com
+      - key: PORT
+        value: 10000
+    healthCheckPath: /health
+    autoDeploy: true
 
   # Frontend Service
   - type: web
@@ -32,16 +38,24 @@ services:
     staticPublishPath: frontend/dist
     envVars:
       - key: VITE_API_URL
-        fromService:
-          type: web
-          name: grant-dashboard-api
-          property: url
+        value: https://grant-dashboard-api.onrender.com
+      - key: NODE_VERSION
+        value: 18.0.0
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: no-cache
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
 
   # Redis Service
   - type: redis
     name: grant-dashboard-redis
     ipAllowList: []
     plan: free
+    maxmemoryPolicy: allkeys-lru
 
 databases:
   - name: grant-dashboard-db
